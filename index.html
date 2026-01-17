@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Question 💗</title>
+  <title>Do you love me?</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,116 +14,171 @@
       min-height: 100vh;
       background: linear-gradient(135deg, #ffd6e8, #fff0f6);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-    .card {
-      background: white;
-      border-radius: 24px;
-      padding: 28px;
-      width: min(90vw, 420px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
       text-align: center;
+      overflow: hidden;
     }
+
+    /* Floating hearts */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 0.8; }
+      to { transform: translateY(-120vh); opacity: 0; }
+    }
+
     h1 {
       color: #ff4d8d;
-      margin-top: 0;
+      margin-bottom: 32px;
+      font-size: 2.2rem;
     }
+
+    .shake {
+      animation: shake 0.3s;
+    }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
     .buttons {
-      margin-top: 20px;
       display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
+      width: 100vw;
+      height: 50vh;
     }
+
     button {
-      background: #ff4d8d;
+      flex: 1;
       border: none;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-size: 16px;
+      font-size: 2rem;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(255,77,141,0.4);
+      transition: all 0.3s ease;
+      animation: bounce 2s infinite;
     }
-    .no {
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    #yesBtn {
+      background: #ff6fae;
+      color: white;
+    }
+    #noBtn {
       background: #888;
+      color: white;
     }
-    .big {
-      font-size: 26px;
-      padding: 16px 26px;
+
+    .grow {
+      flex: 4;
+      font-size: 3rem;
     }
-    .hidden {
-      display: none;
+
+    .hidden { display: none; }
+
+    .finalBox {
+      margin-top: 24px;
+      padding: 24px;
+      border: 3px dashed #ff4d8d;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.7);
     }
-    .box {
-      margin-top: 20px;
-      padding: 16px;
-      border: 2px dashed #ff4d8d;
-      border-radius: 16px;
+
+    .finalBox button {
+      font-size: 1.2rem;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: #ff4d8d;
+      color: white;
+      animation: none;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1 id="question">Do you love me? 💕</h1>
 
-    <div class="buttons" id="buttons">
-      <button id="yesBtn" onclick="stepYes()">Yes</button>
-      <button id="noBtn" class="no" onclick="stepNo()">No</button>
-    </div>
+  <h1 id="question">Do you love me, Zia? 💕</h1>
 
-    <div id="final" class="hidden">
-      <div class="box">
-        <button onclick="revealMessage()">Click me! 💌</button>
-        <p id="message" class="hidden">
-          Surpriseeee 😆💗 This was just a joke!<br><br>
-          I know you love me, and I love you so much more 💕
-          Thank you for always playing along with my silliness.
-        </p>
-      </div>
+  <div class="buttons" id="buttons">
+    <button id="yesBtn" onclick="clickYes()">Yes</button>
+    <button id="noBtn" onclick="clickNo()">No</button>
+  </div>
+
+  <div id="final" class="hidden">
+    <div class="finalBox">
+      <h1>Okay okay 😭</h1>
+      <button onclick="revealMessage()">Click me! 💗</button>
+      <p id="message" class="hidden">
+        Got you, Seyang 😆💞<br><br>
+        This was just a joke, KyutKyut.
+        I know you love me — and I love you so much, KissKiss 💗
+      </p>
     </div>
   </div>
+
+  <!-- Music (plays only after click) -->
+  <iframe id="music" class="hidden" width="0" height="0"
+    src="https://www.youtube.com/embed/7Xy2pJgJQbM?autoplay=1&loop=1"
+    allow="autoplay"></iframe>
 
   <script>
     let step = 0;
 
-    function stepYes() {
+    // floating hearts generator
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = ['💓','💕','💗','💖'][Math.floor(Math.random()*4)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (4 + Math.random()*4) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }, 600);
+
+    function clickYes() {
       if (step === 0) {
-        // Yes becomes No
         document.getElementById('yesBtn').innerText = 'No';
-        document.getElementById('question').innerText = 'Do you love me? 🤨';
+        document.getElementById('question').innerText = 'Do you love me, Zia? 🤨';
         step = 1;
       }
     }
 
-    function stepNo() {
-      if (step === 0) {
-        // First No click does nothing
-        return;
-      }
+    function clickNo() {
+      const yes = document.getElementById('yesBtn');
+      const no = document.getElementById('noBtn');
+      const q = document.getElementById('question');
+
+      if (step === 0) return;
 
       if (step === 1) {
-        // Both answers are No
-        document.getElementById('question').innerText = 'Do you love me? 😐';
-        document.getElementById('yesBtn').innerText = 'No';
+        yes.innerText = 'No';
+        q.innerText = 'Do you love me? 😐';
         step = 2;
         return;
       }
 
       if (step === 2) {
-        // No gets bigger
-        document.getElementById('question').innerText = "You don't love me? :(";
-        document.getElementById('noBtn').classList.add('big');
-        document.getElementById('yesBtn').innerText = 'Yes';
-        document.getElementById('noBtn').innerText = 'Yes';
+        q.innerText = "You don't love me? :(";
+        q.classList.add('shake');
+        setTimeout(() => q.classList.remove('shake'), 300);
+        no.classList.add('grow');
+        yes.innerText = 'Yes';
+        no.innerText = 'Yes';
         step = 3;
         return;
       }
 
       if (step === 3) {
-        // Final reveal
-        document.getElementById('question').innerText = 'Okay okay 😭';
         document.getElementById('buttons').classList.add('hidden');
         document.getElementById('final').classList.remove('hidden');
       }
@@ -131,6 +186,7 @@
 
     function revealMessage() {
       document.getElementById('message').classList.remove('hidden');
+      document.getElementById('music').classList.remove('hidden');
     }
   </script>
 </body>
